@@ -1,21 +1,20 @@
-/* General styles */
+* {
+    box-sizing: border-box;
+}
+
 body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-}
-
-header {
-    background-color: #333;
-    color: white;
-    padding: 10px 0;
+    overflow-x: hidden; /* Prevent horizontal scroll */
 }
 
 .header-container {
     display: flex;
-    align-items: center;
     justify-content: space-between;
-    padding: 0 20px;
+    align-items: center;
+    background-color: #333;
+    padding: 10px;
 }
 
 .logo img {
@@ -23,128 +22,44 @@ header {
 }
 
 nav ul {
-    list-style: none;
+    list-style-type: none;
     margin: 0;
     padding: 0;
     display: flex;
-}
-
-nav ul li {
-    margin: 0 10px;
+    gap: 15px;
 }
 
 nav ul li a {
-    color: white;
     text-decoration: none;
-    padding: 5px 10px;
-}
-
-nav ul li a:hover {
-    background-color: #ffcc00;
-    color: black;
-}
-
-nav ul li a.active {
-    background-color: #ffcc00;
-    color: black;
-}
-
-/* Additional CSS for login form */
-.login-container {
-    max-width: 400px;
-    margin: auto;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
-
-.login-container h2 {
-    text-align: center;
-}
-
-.login-container form {
-    display: flex;
-    flex-direction: column;
-}
-
-.login-container label {
-    margin-top: 10px;
-}
-
-.login-container input {
-    padding: 8px;
-    margin-top: 5px;
-}
-
-.login-container button {
-    margin-top: 20px;
-    padding: 10px;
-    background-color: #4CAF50;
     color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.login-container button:hover {
-    background-color: #45a049;
-}
-
-#error-message {
-    margin-top: 10px;
-    text-align: center;
-    color: red;
-}
-
-#uploadProgress {
-    display: none;
-}
-
-#uploadPercentage {
-    font-weight: bold;
-    color: green;
-}
-
-/* Responsive menu */
-.menu-toggle {
-    display: none;
-    background: none;
-    border: none;
-    color: white;
-    font-size: 24px;
-    cursor: pointer;
-}
-
-nav ul.show-menu {
+    padding: 8px 16px;
     display: block;
 }
 
-@media (max-width: 768px) {
-    nav ul {
-        display: none;
-        flex-direction: column;
-        width: 100%;
-    }
-
-    nav ul li {
-        margin: 10px 0;
-    }
-
-    .menu-toggle {
-        display: block;
-    }
+nav ul li a:hover,
+nav ul li a.active {
+    background-color: #575757;
 }
 
-/* Hero section */
+.menu-toggle {
+    display: none;
+    background-color: #333;
+    color: white;
+    border: none;
+    font-size: 24px;
+}
+
 .hero {
     position: relative;
     text-align: center;
     color: white;
+    overflow: hidden; /* Prevent overflow issues */
 }
 
-.hero img.banner {
+.banner {
     width: 100%;
     height: auto;
+    display: block;
 }
 
 .hero-content {
@@ -152,4 +67,61 @@ nav ul.show-menu {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+}
+
+.footer-content {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 20px 0;
+}
+
+.social-media img {
+    width: 30px;
+    margin: 0 10px;
+}
+
+/* Login Page Styles */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f2f2f2;
+}
+
+.login-form {
+    width: 300px;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+}
+
+.login-form h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.login-form input[type="email"],
+.login-form input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+.login-form button {
+    width: 100%;
+    padding: 10px;
+    background-color: #333;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.login-form button:hover {
+    background-color: #575757;
 }
