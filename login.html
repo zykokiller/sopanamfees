@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Sopanam Music School</title>
+    <link rel="stylesheet" href="login_styles.css"> <link rel="icon" href="favicon.ico" type="image/x-icon"> 
+</head>
+<body>
+    <div class="login-container">
+        <h1>Sopanam Music School Login</h1>
+        <form id="loginForm">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+            <button type="submit">Login</button>
+            <div id="error-message" style="color:red;"></div> 
+        </form>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-auth-compat.js"></script>
+    <script src="app.js" type="module"></script> 
+</body>
+</html>
