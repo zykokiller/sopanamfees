@@ -4,186 +4,65 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Students - Sopanam Music School</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-        #mainMenu {
-            background-color: #333;
-            padding: 10px;
-            text-align: center;
-        }
-        #mainMenu nav ul {
-            list-style-type: none;
-            margin: 0;
-            padding: 0;
-        }
-        #mainMenu nav ul li {
-            display: inline;
-            margin-right: 10px;
-        }
-        #mainMenu nav ul li a {
-            color: #fff;
-            text-decoration: none;
-            padding: 5px 10px;
-        }
-        #mainMenu nav ul li a:hover {
-            background-color: #555;
-        }
-        h1 {
-            text-align: center;
-            margin: 20px 0;
-        }
-        .table-container {
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            flex-wrap: wrap;
-        }
-        table {
-            width: 100%;
-            max-width: 90vw;
-            margin: 20px 20px;
-            border-collapse: collapse;
-        }
-        table, th, td {
-            border: 1px solid #ddd;
-        }
-        th, td {
-            padding: 8px;
-            text-align: left;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-        .delete-button {
-            background-color: #d9534f;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            cursor: pointer;
-        }
-        .delete-button:hover {
-            background-color: #c9302c;
-        }
-    </style>
+    <link rel="stylesheet" href="index_styles.css">
 </head>
 <body>
-    <div id="mainMenu">
-        <nav>
-            <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="add_students.html">Add Students</a></li>
-                <li><a href="fees.html">Fees</a></li>
-                <li><a href="students.html">Students</a></li>
-                <li><a href="pending_fees.html">Pending Fees</a></li>
-            </ul>
-        </nav>
-    </div>
-    <h1>Students - Sopanam Music School</h1>
-    <div class="table-container">
-        <div>
-            <h2>Veena Students</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Student Name</th>
-                        <th>Address</th>
-                        <th>Batch Time</th>
-                        <th>Date of Admission</th>
-                        <th>WhatsApp Number</th>
-                        <th>Phone Number</th>
-                        <th>Photo</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody id="veenaStudentsTableBody">
-                </tbody>
-            </table>
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <img src="logo.png" alt="Logo">
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="add_students.html">Add Students</a></li>
+                    <li><a href="students.html" class="active">Students</a></li>
+                    <li><a href="fees.html">Fees</a></li>
+                    <li><a href="pending_fees.html">Pending Fees</a></li>
+                </ul>
+            </nav>
         </div>
-        <div>
-            <h2>Music Students</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Student Name</th>
-                        <th>Address</th>
-                        <th>Batch Time</th>
-                        <th>Date of Admission</th>
-                        <th>WhatsApp Number</th>
-                        <th>Phone Number</th>
-                        <th>Photo</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody id="musicStudentsTableBody">
-                </tbody>
-            </table>
-        </div>
-    </div>
+    </header>
+
+    <!-- Students list content -->
 
     <script type="module">
-        // Import Firebase functions
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-app.js";
-        import { getFirestore, collection, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-app-compat.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-auth-compat.js";
+        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore.js";
 
-        // Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyBTdroN3i8PB8u8GeMDm_djZaw_lisgJ4M",
-            authDomain: "sopanam-fees-site.firebaseapp.com",
-            projectId: "sopanam-fees-site",
-            storageBucket: "sopanam-fees-site.appspot.com",
-            messagingSenderId: "875694835618",
-            appId: "1:875694835618:web:f28cddc9758eddd40914fb",
-            measurementId: "G-JMR44EQ6M8"
+    authDomain: "sopanam-fees-site.firebaseapp.com",
+    projectId: "sopanam-fees-site",
+    storageBucket: "sopanam-fees-site.appspot.com",
+    messagingSenderId: "875694835618",
+    appId: "1:875694835618:web:f28cddc9758eddd40914fb",
+    measurementId: "G-JMR44EQ6M8"
         };
-
-        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
+        const auth = getAuth();
         const db = getFirestore(app);
 
+        onAuthStateChanged(auth, (user) => {
+            if (!user) {
+                window.location.href = "login.html";
+            }
+        });
+
         async function loadStudents() {
-            const querySnapshot = await getDocs(collection(db, 'students'));
-            const veenaStudentsTableBody = document.getElementById('veenaStudentsTableBody');
-            const musicStudentsTableBody = document.getElementById('musicStudentsTableBody');
+            const studentsSnapshot = await getDocs(collection(db, 'students'));
+            const studentsList = document.getElementById('studentsList');
 
-            querySnapshot.forEach((doc) => {
-                const student = doc.data();
-                const row = document.createElement('tr');
-                const photoCell = student.photoURL ? `<img src="${student.photoURL}" alt="Student Photo" width="50">` : 'No Photo';
-                row.innerHTML = `
-                    <td>${student.studentName}</td>
-                    <td>${student.address}</td>
-                    <td>${student.batchTime}</td>
-                    <td>${student.admissionDate}</td>
-                    <td>${student.whatsappNumber}</td>
-                    <td>${student.phoneNumber}</td>
-                    <td>${photoCell}</td>
-                    <td><button class="delete-button" data-doc-id="${doc.id}">Delete</button></td>
-                `;
-                if (student.course === 'Veena') {
-                    veenaStudentsTableBody.appendChild(row);
-                } else if (student.course === 'Music') {
-                    musicStudentsTableBody.appendChild(row);
-                }
-            });
-
-            // Add event listener for delete buttons
-            document.querySelectorAll('.delete-button').forEach(button => {
-                button.addEventListener('click', deleteStudent);
+            studentsSnapshot.forEach((doc) => {
+                const studentData = doc.data();
+                const studentItem = document.createElement('li');
+                studentItem.textContent = studentData.studentName;
+                studentsList.appendChild(studentItem);
             });
         }
 
-        async function deleteStudent(event) {
-            const docId = event.target.getAttribute('data-doc-id');
-            await deleteDoc(doc(db, 'students', docId));
-            alert('Student deleted successfully!');
-            location.reload(); // Reload the page to reflect the changes
-        }
-
-        window.onload = loadStudents;
+        document.addEventListener('DOMContentLoaded', loadStudents);
     </script>
 </body>
 </html>
