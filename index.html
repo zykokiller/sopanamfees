@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sopanam Music School</title>
+    <link rel="stylesheet" href="index_styles.css">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <!-- Firebase App (the core Firebase SDK) -->
+    <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-app.js"></script>
+    <!-- Add additional services that you want to use -->
+    <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-firestore.js"></script>
+    <script>
+      // Your web app's Firebase configuration
+      const firebaseConfig = {
+         apiKey: "AIzaSyBTdroN3i8PB8u8GeMDm_djZaw_lisgJ4M",
+         authDomain: "sopanam-fees-site.firebaseapp.com",
+         projectId: "sopanam-fees-site",
+         storageBucket: "sopanam-fees-site.appspot.com",
+         messagingSenderId: "875694835618",
+         appId: "1:875694835618:web:f28cddc9758eddd40914fb",
+         measurementId: "G-JMR44EQ6M8"
+      };
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+    </script>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <img src="sopanam_logo.png" alt="Sopanam Music School Logo">
+            </div>
+            <button class="menu-toggle">☰</button>
+            <nav>
+                <ul>
+                    <li><a href="index.html" class="active">Home</a></li>
+                    <li><a href="add_students.html">Add Students</a></li>
+                    <li><a href="students.html">Students</a></li>
+                    <li><a href="fees.html">Fees</a></li>
+                    <li><a href="pending_fees.html">Pending Fees</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <main>
+        <div class="hero">
+            <img src="index_banner.jpg" alt="Banner Image" class="banner">
+            <div class="hero-content">
+                <!-- Content has been removed as per request -->
+            </div>
+        </div>
+    </main>
+    <footer>
+        <div class="footer-content">
+            <div class="social-media">
+                <a href="#"><img src="twitter-icon.png" alt="Twitter"></a>
+                <a href="#"><img src="facebook-icon.png" alt="Facebook"></a>
+                <a href="#"><img src="instagram-icon.png" alt="Instagram"></a>
+            </div>
+        </div>
+    </footer>
+    <script>
+        // Toggle the menu on small screens
+        document.querySelector('.menu-toggle').addEventListener('click', function() {
+            document.querySelector('nav ul').classList.toggle('show-menu');
+        });
+    </script>
+</body>
+</html>

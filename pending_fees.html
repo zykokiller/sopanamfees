@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pending Fees - Sopanam Music School</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        #mainMenu {
+            background-color: #333;
+            padding: 10px;
+            text-align: center;
+        }
+        #mainMenu nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+        #mainMenu nav ul li {
+            display: inline;
+            margin-right: 10px;
+        }
+        #mainMenu nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            padding: 5px 10px;
+        }
+        #mainMenu nav ul li a:hover {
+            background-color: #555;
+        }
+        h1 {
+            text-align: center;
+            margin: 20px 0;
+        }
+        table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <div id="mainMenu">
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="add_students.html">Add Students</a></li>
+                <li><a href="fees.html">Fees</a></li>
+                <li><a href="students.html">Students</a></li>
+                <li><a href="pending_fees.html">Pending Fees</a></li>
+            </ul>
+        </nav>
+    </div>
+    <h1>Pending Fees - Sopanam Music School</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Student Name</th>
+                <th>Pending Months</th>
+            </tr>
+        </thead>
+        <tbody id="pendingFeesTableBody">
+        </tbody>
+    </table>
+
+    <script type="module">
+        // Import Firebase functions
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-app.js";
+        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore.js";
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBTdroN3i8PB8u8GeMDm_djZaw_lisgJ4M",
+            authDomain: "sopanam-fees-site.firebaseapp.com",
+            projectId: "sopanam-fees-site",
+            storageBucket: "sopanam-fees-site.appspot.com",
+            messagingSenderId: "875694835618",
+            appId: "1:875694835618:web:f28cddc9758eddd40914fb",
+            measurementId: "G-JMR44EQ6M8"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        async function loadPendingFees() {
+            const querySnapshot = await getDocs(collection(db, 'students'));
+            const pendingFeesTableBody = document.getElementById('pendingFeesTableBody');
+            querySnapshot.forEach((doc) => {
+                const student = doc.data();
+                const pendingMonths = [];
+                for (let i = 1; i <= 12; i++) {
+                    if (!student[`paid_month${i}`]) {
+                        pendingMonths.push(new Date(2000, i - 1).toLocaleString('default', { month: 'long' }));
+                    }
+                }
+                if (pendingMonths.length > 0) {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${student.studentName}</td>
+                        <td>${pendingMonths.join(', ')}</td>
+                    `;
+                    pendingFeesTableBody.appendChild(row);
+                }
+            });
+        }
+
+        window.onload = loadPendingFees;
+    </script>
+</body>
+</html>
