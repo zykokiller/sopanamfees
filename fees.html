@@ -4,149 +4,72 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fees - Sopanam Music School</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-        #mainMenu {
-            background-color: #333;
-            padding: 10px;
-            text-align: center;
-        }
-        #mainMenu nav ul {
-            list-style-type: none;
-            margin: 0;
-            padding: 0;
-        }
-        #mainMenu nav ul li {
-            display: inline;
-            margin-right: 10px;
-        }
-        #mainMenu nav ul li a {
-            color: #fff;
-            text-decoration: none;
-            padding: 5px 10px;
-        }
-        #mainMenu nav ul li a:hover {
-            background-color: #555;
-        }
-        h1 {
-            text-align: center;
-            margin: 20px 0;
-        }
-        table {
-            width: 80%;
-            margin: 20px auto;
-            border-collapse: collapse;
-        }
-        table, th, td {
-            border: 1px solid #ddd;
-        }
-        th, td {
-            padding: 8px;
-            text-align: left;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-    </style>
+    <link rel="stylesheet" href="index_styles.css">
 </head>
 <body>
-    <div id="mainMenu">
-        <nav>
-            <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="add_students.html">Add Students</a></li>
-                <li><a href="fees.html">Fees</a></li>
-                <li><a href="students.html">Students</a></li>
-                <li><a href="pending_fees.html">Pending Fees</a></li>
-            </ul>
-        </nav>
-    </div>
-    <h1>Fees - Sopanam Music School</h1>
-    <table>
-        <thead>
-            <tr>
-                <th>Student Name</th>
-                <th>Batch Time</th>
-                <th>January</th>
-                <th>February</th>
-                <th>March</th>
-                <th>April</th>
-                <th>May</th>
-                <th>June</th>
-                <th>July</th>
-                <th>August</th>
-                <th>September</th>
-                <th>October</th>
-                <th>November</th>
-                <th>December</th>
-            </tr>
-        </thead>
-        <tbody id="feesTableBody">
-        </tbody>
-    </table>
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <img src="logo.png" alt="Logo">
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="add_students.html">Add Students</a></li>
+                    <li><a href="students.html">Students</a></li>
+                    <li><a href="fees.html" class="active">Fees</a></li>
+                    <li><a href="pending_fees.html">Pending Fees</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Fees management content -->
 
     <script type="module">
-        // Import Firebase functions
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-app.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-app-compat.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-auth-compat.js";
         import { getFirestore, collection, getDocs, updateDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore.js";
 
-        // Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyBTdroN3i8PB8u8GeMDm_djZaw_lisgJ4M",
-            authDomain: "sopanam-fees-site.firebaseapp.com",
-            projectId: "sopanam-fees-site",
-            storageBucket: "sopanam-fees-site.appspot.com",
-            messagingSenderId: "875694835618",
-            appId: "1:875694835618:web:f28cddc9758eddd40914fb",
-            measurementId: "G-JMR44EQ6M8"
+    authDomain: "sopanam-fees-site.firebaseapp.com",
+    projectId: "sopanam-fees-site",
+    storageBucket: "sopanam-fees-site.appspot.com",
+    messagingSenderId: "875694835618",
+    appId: "1:875694835618:web:f28cddc9758eddd40914fb",
+    measurementId: "G-JMR44EQ6M8"
         };
-
-        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
+        const auth = getAuth();
         const db = getFirestore(app);
 
-        async function loadFees() {
-            const querySnapshot = await getDocs(collection(db, 'students'));
-            const feesTableBody = document.getElementById('feesTableBody');
-            querySnapshot.forEach((doc) => {
-                const student = doc.data();
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${student.studentName}</td>
-                    <td>${student.batchTime}</td>
-                    ${generateCheckboxes(student, doc.id)}
-                `;
-                feesTableBody.appendChild(row);
+        onAuthStateChanged(auth, (user) => {
+            if (!user) {
+                window.location.href = "login.html";
+            }
+        });
+
+        async function loadStudents() {
+            const studentsSnapshot = await getDocs(collection(db, 'students'));
+            const studentsList = document.getElementById('studentsList');
+
+            studentsSnapshot.forEach((doc) => {
+                const studentData = doc.data();
+                const studentItem = document.createElement('li');
+                studentItem.textContent = studentData.studentName;
+                const paidCheckbox = document.createElement('input');
+                paidCheckbox.type = 'checkbox';
+                paidCheckbox.checked = studentData.feesPaid || false;
+                paidCheckbox.addEventListener('change', async () => {
+                    await updateDoc(doc(db, 'students', doc.id), { feesPaid: paidCheckbox.checked });
+                });
+                studentItem.appendChild(paidCheckbox);
+                studentsList.appendChild(studentItem);
             });
-
-            // Add event listener for checkboxes
-            document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
-                checkbox.addEventListener('change', updateFeeStatus);
-            });
         }
 
-        function generateCheckboxes(student, docId) {
-            const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-            return months.map((month, index) => {
-                const paid = student[`paid_month${index + 1}`];
-                return `<td><input type="checkbox" ${paid ? 'checked' : ''} data-doc-id="${docId}" data-month="${index + 1}"></td>`;
-            }).join('');
-        }
-
-        async function updateFeeStatus(event) {
-            const checkbox = event.target;
-            const docId = checkbox.getAttribute('data-doc-id');
-            const month = checkbox.getAttribute('data-month');
-            const status = checkbox.checked;
-            const studentRef = doc(db, 'students', docId);
-            await updateDoc(studentRef, { [`paid_month${month}`]: status });
-        }
-
-        window.onload = loadFees;
+        document.addEventListener('DOMContentLoaded', loadStudents);
     </script>
 </body>
 </html>
