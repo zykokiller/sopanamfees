@@ -93,6 +93,7 @@ nav ul li a.active {
 #error-message {
     margin-top: 10px;
     text-align: center;
+    color: red;
 }
 
 #uploadProgress {
