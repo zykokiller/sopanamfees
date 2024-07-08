@@ -4,133 +4,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Students - Sopanam Music School</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-        #mainMenu {
-            background-color: #333;
-            padding: 10px;
-            text-align: center;
-        }
-        #mainMenu nav ul {
-            list-style-type: none;
-            margin: 0;
-            padding: 0;
-        }
-        #mainMenu nav ul li {
-            display: inline;
-            margin-right: 10px;
-        }
-        #mainMenu nav ul li a {
-            color: #fff;
-            text-decoration: none;
-            padding: 5px 10px;
-        }
-        #mainMenu nav ul li a:hover {
-            background-color: #555;
-        }
-        h1 {
-            text-align: center;
-            margin: 20px 0;
-        }
-        form {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            background-color: #f9f9f9;
-        }
-        label {
-            display: block;
-            margin-bottom: 8px;
-        }
-        input[type="text"],
-        input[type="date"],
-        input[type="file"],
-        select {
-            width: 100%;
-            padding: 8px;
-            margin-bottom: 16px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        button {
-            width: 100%;
-            padding: 10px;
-            background-color: #28a745;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #218838;
-        }
-        #uploadProgress {
-            width: 100%;
-            background-color: #f3f3f3;
-            margin-top: 10px;
-            padding: 5px;
-            text-align: center;
-            display: none;
-        }
-    </style>
+    <link rel="stylesheet" href="index_styles.css">
 </head>
 <body>
-    <div id="mainMenu">
-        <nav>
-            <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="add_students.html">Add Students</a></li>
-                <li><a href="fees.html">Fees</a></li>
-                <li><a href="students.html">Students</a></li>
-                <li><a href="pending_fees.html">Pending Fees</a></li>
-            </ul>
-        </nav>
-    </div>
-    <h1>Add Students - Sopanam Music School</h1>
-    <form id="addStudentForm">
-        <label for="studentName">Student Name:</label>
-        <input type="text" id="studentName" name="studentName" required>
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <img src="logo.png" alt="Logo">
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="add_students.html" class="active">Add Students</a></li>
+                    <li><a href="students.html">Students</a></li>
+                    <li><a href="fees.html">Fees</a></li>
+                    <li><a href="pending_fees.html">Pending Fees</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
 
-        <label for="address">Address:</label>
-        <input type="text" id="address" name="address" required>
-
-        <label for="batchTime">Batch Time:</label>
-        <input type="text" id="batchTime" name="batchTime" required>
-
-        <label for="admissionDate">Date of Admission:</label>
-        <input type="date" id="admissionDate" name="admissionDate" required>
-
-        <label for="whatsappNumber">WhatsApp Number:</label>
-        <input type="text" id="whatsappNumber" name="whatsappNumber" required>
-
-        <label for="phoneNumber">Phone Number:</label>
-        <input type="text" id="phoneNumber" name="phoneNumber" required>
-
-        <label for="course">Course:</label>
-        <select id="course" name="course" required>
-            <option value="Veena">Veena</option>
-            <option value="Music">Music</option>
-        </select>
-
-        <label for="photo">Student Photo:</label>
-        <input type="file" id="photo" name="photo">
-
-        <div id="uploadProgress">Uploading: <span id="uploadPercentage">0%</span></div>
-
-        <button type="submit">Add Student</button>
-    </form>
+    <!-- Add Students form content -->
 
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-app.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-app-compat.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-auth-compat.js";
         import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore.js";
         import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-storage.js";
-        import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-auth.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyBTdroN3i8PB8u8GeMDm_djZaw_lisgJ4M",
@@ -141,19 +41,16 @@
     appId: "1:875694835618:web:f28cddc9758eddd40914fb",
     measurementId: "G-JMR44EQ6M8"
         };
-
         const app = initializeApp(firebaseConfig);
+        const auth = getAuth();
         const db = getFirestore(app);
         const storage = getStorage(app);
-        const auth = getAuth(app);
 
-        signInAnonymously(auth)
-            .then(() => {
-                console.log('Signed in anonymously');
-            })
-            .catch((error) => {
-                console.error('Error signing in anonymously:', error);
-            });
+        onAuthStateChanged(auth, (user) => {
+            if (!user) {
+                window.location.href = "login.html";
+            }
+        });
 
         const addStudentForm = document.getElementById('addStudentForm');
         addStudentForm.addEventListener('submit', async (event) => {
