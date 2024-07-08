@@ -4,23 +4,54 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Sopanam Music School</title>
-    <link rel="stylesheet" href="login_styles.css"> <link rel="icon" href="favicon.ico" type="image/x-icon"> 
+    <link rel="stylesheet" href="index_styles.css">
 </head>
 <body>
     <div class="login-container">
-        <h1>Sopanam Music School Login</h1>
+        <h2>Login</h2>
         <form id="loginForm">
             <label for="email">Email:</label>
             <input type="email" id="email" name="email" required>
             <label for="password">Password:</label>
             <input type="password" id="password" name="password" required>
             <button type="submit">Login</button>
-            <div id="error-message" style="color:red;"></div> 
+            <p id="error-message" style="color:red;"></p>
         </form>
     </div>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-app-compat.js";
+        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-auth-compat.js";
 
-    <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-auth-compat.js"></script>
-    <script src="app.js" type="module"></script> 
+        const firebaseConfig = {
+            apiKey: "AIzaSyBTdroN3i8PB8u8GeMDm_djZaw_lisgJ4M",
+    authDomain: "sopanam-fees-site.firebaseapp.com",
+    projectId: "sopanam-fees-site",
+    storageBucket: "sopanam-fees-site.appspot.com",
+    messagingSenderId: "875694835618",
+    appId: "1:875694835618:web:f28cddc9758eddd40914fb",
+    measurementId: "G-JMR44EQ6M8"
+        };
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth();
+
+        const loginForm = document.getElementById("loginForm");
+        const errorMessage = document.getElementById("error-message");
+
+        if (loginForm) {
+            loginForm.addEventListener('submit', (event) => {
+                event.preventDefault();
+                const email = loginForm.email.value;
+                const password = loginForm.password.value;
+
+                signInWithEmailAndPassword(auth, email, password)
+                    .then((userCredential) => {
+                        window.location.href = "index.html";
+                    })
+                    .catch((error) => {
+                        errorMessage.textContent = error.message;
+                    });
+            });
+        }
+    </script>
 </body>
 </html>
